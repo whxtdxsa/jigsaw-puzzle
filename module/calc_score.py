@@ -53,33 +53,61 @@ def calc_puzzle(answer_df, submission_df):
     score = (accuracies['1x1'] + accuracies['2x2'] + accuracies['3x3'] + accuracies['4x4']) / 4.
     return score
 
-def eval_model(model, dataloader, df):
-    outs = []
-    model.eval()
-    with torch.no_grad():
-        for x in tqdm(dataloader, desc="evaluating..."):
-            x = x.to('cuda')
-            out = model.forward_test(x)
-            out = out.argmax(dim=2).cpu().numpy()
-            outs.append(out)
-    outs = np.vstack(outs)
+# def eval_model(model, dataloader, df):
+    # outs = []
+    # model.eval()
+    # with torch.no_grad():
+    #     for x in tqdm(dataloader, desc="evaluating..."):
+    #         x = x.to('cuda')
+    #         out = model.forward_test(x)
+    #         out = out.argmax(dim=2).cpu().numpy()
+    #         outs.append(out)
+    # outs = np.vstack(outs)
 
-    pred_df = df.copy().drop(columns=['img_path'])
+    # pred_df = df.copy().drop(columns=['img_path'])
     
-    for I, (idx, row) in enumerate(pred_df.iterrows()):
-        w = outs[I].reshape(24,24)
-        CNT_ROW = np.zeros((4,4,4), dtype=np.int32)
-        CNT_COL = np.zeros((4,4,4), dtype=np.int32)
-        for i in range(24):
-            for j in range(24):
-                ROW = i // 6
-                COL = j // 6
-                v = w[i][j]
-                CNT_ROW[ROW][COL][v // 24 // 6] += 1
-                CNT_COL[ROW][COL][v % 24 // 6] += 1
-        ans = CNT_ROW.argmax(2) * 4 + CNT_COL.argmax(2) + 1
-        ans = ans.reshape(16)
-        ans = list(map(str, ans))
-        pred_df.loc[idx, '1':'16'] = ans
+    # for I, (idx, row) in enumerate(pred_df.iterrows()):
+    #     w = outs[I].reshape(24,24)
+    #     CNT_ROW = np.zeros((4,4,4), dtype=np.int32)
+    #     CNT_COL = np.zeros((4,4,4), dtype=np.int32)
+    #     for i in range(24):
+    #         for j in range(24):
+    #             ROW = i // 6
+    #             COL = j // 6
+    #             v = w[i][j]
+    #             CNT_ROW[ROW][COL][v // 24 // 6] += 1
+    #             CNT_COL[ROW][COL][v % 24 // 6] += 1
+    #     ans = CNT_ROW.argmax(2) * 4 + CNT_COL.argmax(2) + 1
+    #     ans = ans.reshape(16)
+    #     ans = list(map(str, ans))
+    #     pred_df.loc[idx, '1':'16'] = ans
+
+    # return pred_df
+
+def eval_model(model, dataloader, df):
+    model.eval()
+    all_outputs = []
+    with torch.no_grad():
+        for x in tqdm(dataloader, desc="Evaluating"):
+            x = x.to('cuda')
+            outputs = model.forward_test(x)
+            all_outputs.append(outputs.argmax(dim=2))
+
+    all_outputs = torch.cat(all_outputs, dim=0).cpu()  # Concatenate and move to CPU after processing
+
+    # Vectorized computation for prediction
+    w = all_outputs.view(-1, 24, 24)  # Reshape for easier manipulation
+    CNT_ROW = w // (24 * 6)
+    CNT_COL = w % 24 // 6
+    CNT_ROW = CNT_ROW.view(-1, 4, 6, 4, 6).sum(dim=[2, 4])  # Sum over rows and columns
+    CNT_COL = CNT_COL.view(-1, 4, 6, 4, 6).sum(dim=[2, 4])
+
+    ans = CNT_ROW.argmax(dim=2) * 4 + CNT_COL.argmax(dim=2) + 1
+    ans = ans.reshape(-1, 16)
+
+    # Constructing DataFrame
+    pred_df = df.iloc[:, :2].copy()  # Copying ID and img_path columns
+    for i in range(1, 17):
+        pred_df[str(i)] = ans[:, i-1].numpy().astype(str)
 
     return pred_df

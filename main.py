@@ -47,7 +47,7 @@ optimizer = optim.AdamW(model.parameters(),
 from module.model_train import model_train
 model_train(train_dataloader, model, optimizer, device, config["epochs"], config["model_save_path"])
 
-from module.calc_score import eval_model, calc_puzzle
-pred_valid_df = eval_model(model, valid_dataloader, valid_df)
-score = calc_puzzle(valid_df, pred_valid_df)
-print("total score:", score)
+# from module.calc_score import eval_model, calc_puzzle
+# pred_valid_df = eval_model(model, valid_dataloader, valid_df)
+# score = calc_puzzle(valid_df, pred_valid_df)
+# print("total score:", score)

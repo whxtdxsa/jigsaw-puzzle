@@ -9,13 +9,17 @@ class Model(nn.Module):
         self.mask_ratio = mask_ratio
         self.pretrained = pretrained
 
+        # Use a smaller variant of DEiT3
         deit3 = timm.create_model('deit3_base_patch16_384', pretrained = pretrained)
+        # deit3 = timm.create_model('deit3_small_patch16_224', pretrained=pretrained)
 
+        # Use relevant parts of DEiT3
         self.patch_embed = deit3.patch_embed
         self.cls_token = deit3.cls_token
         self.blocks = deit3.blocks
         self.norm = deit3.norm
 
+        # Simplified jigsaw head
         self.jigsaw = nn.Sequential(
             nn.Linear(768, 768),
             nn.ReLU(),
@@ -23,6 +27,7 @@ class Model(nn.Module):
             nn.ReLU(),
             nn.Linear(768, 24*24)
         )
+        # self.jigsaw = nn.Linear(384, 24*24)  # Adjust number of neurons
 
     def random_masking(self, x, mask_ratio):
         """
