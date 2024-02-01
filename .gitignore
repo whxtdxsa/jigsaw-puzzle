@@ -2,3 +2,5 @@ __pycache__
 .hypothesis
 data
 open.zip
+model
+result
