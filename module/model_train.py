@@ -2,14 +2,11 @@ import torch
 import torch.nn.functional as F
 from tqdm.auto import tqdm
 
-def model_train(train_dataloader, model, optimizer, epochs, save_path):
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = model.to(device)
+def model_train(train_dataloader, model, optimizer, device, epochs, save_path):
 
     for epoch in range(1, epochs+ 1):
-        print('Epoch ', epoch)
         model.train()
-        for i, x in tqdm(enumerate(train_dataloader), total=len(train_dataloader),desc=f"epoch {epochs}"):
+        for i, x in tqdm(enumerate(train_dataloader), total=len(train_dataloader),desc=f"epoch {epoch}"):
             x = x.to(device)
 
             optimizer.zero_grad()

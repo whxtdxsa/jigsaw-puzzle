@@ -1,17 +1,17 @@
+is_import_model: False
+import_model_name: '/model_2024-01-29_state_5.pth'
+
 mask_ratio: 0.25
 pretrained: True
 lr: 0.0001
 weight_decay: 0.05
 
-epochs: 10
+epochs: 1
 
-train_size: -6000
+train_size: -59000
 batch_size: 16
 num_workers: 24
 
 data_path: './data'
 model_save_path: './model'
 result_save_path: './result'
-
-is_import_model: True
-import_model_name: 

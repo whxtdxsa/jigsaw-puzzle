@@ -57,7 +57,7 @@ def eval_model(model, dataloader, df):
     outs = []
     model.eval()
     with torch.no_grad():
-        for x in tqdm(dataloader):
+        for x in tqdm(dataloader, desc="evaluating..."):
             x = x.to('cuda')
             out = model.forward_test(x)
             out = out.argmax(dim=2).cpu().numpy()
@@ -66,7 +66,7 @@ def eval_model(model, dataloader, df):
 
     pred_df = df.copy().drop(columns=['img_path'])
     
-    for I, (idx, row) in enumerate(tqdm(pred_df.iterrows(), total=len(df))):
+    for I, (idx, row) in enumerate(pred_df.iterrows()):
         w = outs[I].reshape(24,24)
         CNT_ROW = np.zeros((4,4,4), dtype=np.int32)
         CNT_COL = np.zeros((4,4,4), dtype=np.int32)
