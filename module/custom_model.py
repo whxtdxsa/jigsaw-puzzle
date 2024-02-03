@@ -21,13 +21,13 @@ class Model(nn.Module):
 
         # Simplified jigsaw head
         self.jigsaw = nn.Sequential(
-            nn.Linear(768, 768),
-            nn.ReLU(),
+            # nn.Linear(768, 768),
+            # nn.ReLU(),
             nn.Linear(768, 768),
             nn.ReLU(),
             nn.Linear(768, 24*24)
         )
-        # self.jigsaw = nn.Linear(384, 24*24)  # Adjust number of neurons
+        # self.jigsaw = nn.Linear(768, 24*24)  # Adjust number of neurons
 
     def random_masking(self, x, mask_ratio):
         """

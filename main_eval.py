@@ -3,7 +3,7 @@ with open('./config.yaml') as f:
     config = yaml.safe_load(f)
 
 from module.data_loader import get_dataframe, get_dataset_test
-train_df, valid_df, test_df = get_dataframe(config["data_path"], config["train_size"])
+train_df, valid_df, test_df = get_dataframe(config["data_path"], config["train_size"], config["test_size"])
 
 test_dataset = get_dataset_test(test_df, config["data_path"])
 
@@ -30,11 +30,11 @@ optimizer = optim.AdamW(model.parameters(),
                         lr=config["lr"],
                         weight_decay=config["weight_decay"])
 
-from module.calc_score import eval_model
+from module.model_eval import eval_model
 
 from datetime import datetime
 now = datetime.now()
 date = now.date()
 
 test_pred_df = eval_model(model, test_dataloader, test_df)
-test_pred_df.to_csv(config["result_save_path"] + f'/submission_{date}.csv', index=False)
+test_pred_df.to_csv(config["result_save_path"] + config["import_model_name"] + ".csv", index=False)

@@ -1,5 +1,4 @@
 import timm
-from timm.data import create_transform
 from torchvision import transforms
 from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from module.custom_dataset import JigsawDataset
@@ -27,34 +26,24 @@ def build_transform(is_train):
         normalize_transform
     ])
     return valid_transform
-    # if is_train:
-    #     # this should always dispatch to transforms_imagenet_train
-    #     transform = create_transform(
-    #         input_size = (384, 384),
-    #         is_training = True,
-    #         color_jitter = 0.3,
-    #         auto_augment = 'rand-m9-mstd0.5-inc1',
-    #         interpolation= 'bicubic',
-    #         re_prob= 0.25,
-    #         re_mode= 'pixel',
-    #         re_count= 1,
-    #     )
-    #     return transform
 
-    # t = []
-    # t.append(transforms.Resize((384,384), interpolation=3))
-    # t.append(transforms.ToTensor())
-    # t.append(transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD))
-    # return transforms.Compose(t)
 
-def get_dataframe(data_path='./data', train_size=-100):
+def get_dataframe(data_path='./data', train_size=-1, test_size=-1):
     train_csv = pd.read_csv(data_path+'/train.csv')
     test_csv = pd.read_csv(data_path+'/test.csv')
     
-    train_csv = train_csv.iloc[:train_size]
-    train_df = train_csv.iloc[:int(train_size * 0.8)]    # train dataframe
-    valid_df = train_csv.iloc[int(train_size * 0.8):]    # valid dataframe
-    test_df = test_csv.iloc[:]
+    if train_size != -1:
+        train_csv = train_csv.iloc[:train_size]
+        train_df = train_csv.iloc[:int(train_size * 0.8)]    # train dataframe
+        valid_df = train_csv.iloc[int(train_size * 0.8):]    # valid dataframe
+    else:
+        train_df = train_csv.iloc[:int(len(train_csv) * 0.8)]    # train dataframe
+        valid_df = train_csv.iloc[int(len(train_csv) * 0.8):]    # valid dataframe 
+
+    if test_size != -1:
+        test_df = test_csv.iloc[:test_size]
+    else:
+        test_df = test_csv.iloc[:]
     for i in range(1, 17): test_df[str(i)] = i
 
     return train_df, valid_df, test_df

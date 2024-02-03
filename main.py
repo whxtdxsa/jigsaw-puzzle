@@ -1,7 +1,6 @@
 from module.data_download import download_and_unzip, download_lib
-if __name__ == "__main__":
-    download_lib()
-    download_and_unzip()
+download_and_unzip()
+download_lib()
 
 import yaml
 with open('./config.yaml') as f:

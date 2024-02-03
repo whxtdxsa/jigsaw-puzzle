@@ -1,14 +1,15 @@
 is_import_model: False
-import_model_name: '/model_state_10.pth'
+import_model_name: '/model_state_v2.pth'
 
-mask_ratio: 0.25
+mask_ratio: 0.05
 pretrained: True
-lr: 0.001
+lr: 0.0005
 weight_decay: 0.05
 
-epochs: 10
+epochs: 100
 
-train_size: 1000
+train_size: -1
+test_size: -1
 batch_size: 16
 num_workers: 16
 

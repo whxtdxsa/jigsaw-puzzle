@@ -14,4 +14,5 @@ def model_train(train_dataloader, model, optimizer, device, epochs, save_path):
 
             loss.backward()
             optimizer.step()
-        torch.save(model.state_dict(), save_path + f'/model_state_{epoch}.pth')
+        if epoch % 4 == 0:
+            torch.save(model.state_dict(), save_path + f'/model_state_{epoch}.pth')
