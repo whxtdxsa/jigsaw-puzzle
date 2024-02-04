@@ -3,7 +3,7 @@ download_and_unzip()
 download_lib()
 
 import yaml
-with open('./config.yaml') as f:
+with open('./config_main.yaml') as f:
     config = yaml.safe_load(f)
 
 from module.data_loader import get_dataframe, get_dataset
@@ -31,20 +31,22 @@ valid_dataloader = DataLoader(
 )
 
 from module.custom_model import Model
-model = Model(config["mask_ratio"], config["pretrained"])
+model = Model(config["mask_ratio"], config["pretrained"], str(config["num_fc_layer"]))
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = model.to(device)
 
 if config["is_import_model"]:
-    model.load_state_dict(torch.load(config["model_save_path"] + config["import_model_name"]))
+    model.load_state_dict(torch.load(config["model_save_path"] + str(config["num_fc_layer"]) + config["import_model_name"]))
 
 import torch.optim as optim
 optimizer = optim.AdamW(model.parameters(),
                         lr=config["lr"],
                         weight_decay=config["weight_decay"])
 
+
+proceeded_epoch = config["import_model_name"].split("_")[-1].split(".")[0]
 from module.model_train import model_train
-model_train(train_dataloader, model, optimizer, device, config["epochs"], config["model_save_path"])
+model_train(train_dataloader, model, optimizer, device, config["epochs"], config["model_save_path"] + str(config["num_fc_layer"]), int(proceeded_epoch))
 
 # from module.calc_score import eval_model, calc_puzzle
 # pred_valid_df = eval_model(model, valid_dataloader, valid_df)

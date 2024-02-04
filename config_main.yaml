@@ -1,0 +1,20 @@
+is_import_model: True
+import_model_name: '/model_state_12.pth'
+
+model_save_path: './model/model_layer'
+result_save_path: './result/model_layer'
+data_path: './data'
+
+num_fc_layer: 3
+mask_ratio: 0.005
+pretrained: True
+
+lr: 0.0005
+weight_decay: 0.05
+epochs: 52
+
+train_size: -1
+test_size: -1
+batch_size: 16
+num_workers: 16
+

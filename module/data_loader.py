@@ -27,7 +27,6 @@ def build_transform(is_train):
     ])
     return valid_transform
 
-
 def get_dataframe(data_path='./data', train_size=-1, test_size=-1):
     train_csv = pd.read_csv(data_path+'/train.csv')
     test_csv = pd.read_csv(data_path+'/test.csv')

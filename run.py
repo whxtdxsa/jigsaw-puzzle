@@ -1,5 +1,5 @@
 import yaml
-with open('./config.yaml') as f:
+with open('./config_run.yaml') as f:
     config = yaml.safe_load(f)
 
 from module.data_loader import get_dataframe, get_dataset_test
@@ -19,22 +19,12 @@ test_dataloader = DataLoader(
 )
 
 from module.custom_model import Model
-model = Model(config["mask_ratio"], config["pretrained"])
+model = Model(config["mask_ratio"], config["pretrained"], config["num_fc_layer"])
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = model.to(device)
 
-model.load_state_dict(torch.load(config["model_save_path"] + config["import_model_name"]))
-
-import torch.optim as optim
-optimizer = optim.AdamW(model.parameters(),
-                        lr=config["lr"],
-                        weight_decay=config["weight_decay"])
+model.load_state_dict(torch.load(config["model_save_path"] + str(config["num_fc_layer"]) + config["import_model_name"]))
 
 from module.model_eval import eval_model
-
-from datetime import datetime
-now = datetime.now()
-date = now.date()
-
 test_pred_df = eval_model(model, test_dataloader, test_df)
-test_pred_df.to_csv(config["result_save_path"] + config["import_model_name"] + ".csv", index=False)
+test_pred_df.to_csv(config["result_save_path"] + str(config["num_fc_layer"]) + config["import_model_name"] + ".csv", index=False)

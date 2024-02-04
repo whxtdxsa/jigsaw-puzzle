@@ -1,0 +1,15 @@
+import_model_name: '/model_state_16.pth'
+
+model_save_path: './model/model_layer'
+result_save_path: './result/model_layer'
+data_path: './data'
+
+num_fc_layer: 3
+mask_ratio: 0.002
+pretrained: True
+
+train_size: -1
+test_size: -1
+batch_size: 16
+num_workers: 16
+
