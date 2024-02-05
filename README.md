@@ -46,9 +46,6 @@ Practice design whole process of the project using object oriented programming. 
     requirements.txt
     
 
-You can get all codes in this project below GitHub source.
-
-[GitHub - whxtdxsa/solve-puzzle](https://github.com/whxtdxsa/solve-puzzle)
 
 # Data Prepare
 
@@ -363,8 +360,9 @@ Since there are a lot of hyperparameters, we just introduce a few elements.
 - Epochs
     
     Just increased epochs where model is underfitted and saved model’s weight. After config overfitting, we changed hyperparameters and proceeded from saved model’s weight.
-    
-    ![Untitled](DACON%20Rearrange%20Image%205648d611c3d240a08e08f8572108ccf4/Untitled.png)
+    <p align="left">
+        <img src="images/model_state.png" width="200">   
+    </p>
     
 
 ### Entire Code of Config
@@ -399,7 +397,9 @@ num_workers: 16
 | --- | --- | --- | --- | --- | --- | --- |
 | Max accuracy | 0.02 | 0.54 | 0.61 | 0.73 | 0.84 | 0.85 |
 
-![Untitled](DACON%20Rearrange%20Image%205648d611c3d240a08e08f8572108ccf4/Untitled%201.png)
+<p align="center">
+    <img src="images/result.png" width="800">   
+</p>
 
 # Future work
 
