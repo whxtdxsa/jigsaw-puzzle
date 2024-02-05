@@ -1,11 +1,11 @@
-import_model_name: '/model_state_16.pth'
+import_model_name: '/model_state_44.pth'
 
 model_save_path: './model/model_layer'
 result_save_path: './result/model_layer'
 data_path: './data'
 
 num_fc_layer: 3
-mask_ratio: 0.002
+mask_ratio: 0
 pretrained: True
 
 train_size: -1

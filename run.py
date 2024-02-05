@@ -1,3 +1,6 @@
+from module.data_download import download_and_unzip, download_lib
+download_lib()
+
 import yaml
 with open('./config_run.yaml') as f:
     config = yaml.safe_load(f)

@@ -2,8 +2,6 @@ __pycache__
 .hypothesis
 data
 open.zip
-nohup_model_layer1.out
-nohup_model_layer3.out
 nohup.out
 model
 result
